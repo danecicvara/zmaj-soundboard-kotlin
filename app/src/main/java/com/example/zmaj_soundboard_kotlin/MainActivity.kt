@@ -2,32 +2,49 @@ package com.example.zmaj_soundboard_kotlin
 
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mediaPlayer: MediaPlayer
     private lateinit var imageView: ImageView
+    private lateinit var soundRecyclerView: RecyclerView
     private val soundList = listOf(
         R.raw.kasalj,
         R.raw.bjezi_dragoja,
         R.raw.ojebine
     )
 
+    private var isListVisible = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val playRandomButton: Button = findViewById(R.id.playRandomButton)
         imageView = findViewById(R.id.imageView)
+        soundRecyclerView = findViewById(R.id.soundRecyclerView)
 
-        playRandomButton.setOnClickListener {
+        val expandListButton: Button = findViewById(R.id.expandListButton)
+
+        setupRecyclerView()
+
+        imageView.setOnClickListener {
             playRandomSound(soundList.random())
         }
-    }
 
+        expandListButton.setOnClickListener {
+            toggleSoundList()
+        }
+    }
+    private fun toggleSoundList() {
+        isListVisible = !isListVisible
+        soundRecyclerView.visibility = if (isListVisible) View.VISIBLE else View.GONE
+    }
     private fun playRandomSound(soundResId: Int) {
         if (::mediaPlayer.isInitialized && mediaPlayer.isPlaying) {
             mediaPlayer.release()
@@ -36,12 +53,17 @@ class MainActivity : AppCompatActivity() {
         mediaPlayer = MediaPlayer.create(this, soundResId)
         mediaPlayer.start()
 
-        // Change the image to the "playing" state
         imageView.setImageResource(R.drawable.zmaj_prica200)
 
-        // Set an OnCompletionListener to reset the image when the sound finishes
         mediaPlayer.setOnCompletionListener {
             resetImage()
+        }
+    }
+
+    private fun setupRecyclerView() {
+        soundRecyclerView.layoutManager = LinearLayoutManager(this)
+        soundRecyclerView.adapter = SoundAdapter(soundList) { soundResId ->
+            playRandomSound(soundResId)
         }
     }
 
