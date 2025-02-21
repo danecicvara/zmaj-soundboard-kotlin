@@ -1,27 +1,26 @@
 package com.example.zmaj_soundboard_kotlin
 
 import android.media.MediaPlayer
-import android.media.SoundPool
 import android.os.Bundle
 import android.view.View
-import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mediaPlayer: MediaPlayer
     private lateinit var imageView: ImageView
+    private lateinit var expandListButton: Button
     private lateinit var soundRecyclerView: RecyclerView
+
     private val soundList by lazy {
         val rawClass = R.raw::class.java
         rawClass.fields.mapNotNull { field ->
             try {
-                field.getInt(null) // Get resource ID
+                field.getInt(null)
             } catch (e: Exception) {
                 null
             }
@@ -36,18 +35,10 @@ class MainActivity : AppCompatActivity() {
 
         imageView = findViewById(R.id.imageView)
         soundRecyclerView = findViewById(R.id.soundRecyclerView)
-
-        val expandListButton: Button = findViewById(R.id.expandListButton)
+        expandListButton= findViewById(R.id.expandListButton)
 
         setupRecyclerView()
-
-        imageView.setOnClickListener {
-            playRandomSound(soundList.random())
-        }
-
-        expandListButton.setOnClickListener {
-            toggleSoundList()
-        }
+        initializeButtons()
     }
     private fun toggleSoundList() {
         isListVisible = !isListVisible
@@ -68,6 +59,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun initializeButtons() {
+        imageView.setOnClickListener {
+            playRandomSound(soundList.random())
+        }
+
+        expandListButton.setOnClickListener {
+            toggleSoundList()
+        }
+    }
+
     private fun setupRecyclerView() {
         soundRecyclerView.layoutManager = LinearLayoutManager(this)
         soundRecyclerView.adapter = SoundAdapter(soundList) { soundResId ->
@@ -78,5 +79,4 @@ class MainActivity : AppCompatActivity() {
     private fun resetImage() {
         imageView.setImageResource(R.drawable.zmaj_cuti200)
     }
-
 }
