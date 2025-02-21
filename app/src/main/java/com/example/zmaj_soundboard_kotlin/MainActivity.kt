@@ -1,24 +1,32 @@
 package com.example.zmaj_soundboard_kotlin
 
 import android.media.MediaPlayer
+import android.media.SoundPool
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mediaPlayer: MediaPlayer
     private lateinit var imageView: ImageView
     private lateinit var soundRecyclerView: RecyclerView
-    private val soundList = listOf(
-        R.raw.kasalj,
-        R.raw.bjezi_dragoja,
-        R.raw.ojebine
-    )
+    private val soundList by lazy {
+        val rawClass = R.raw::class.java
+        rawClass.fields.mapNotNull { field ->
+            try {
+                field.getInt(null) // Get resource ID
+            } catch (e: Exception) {
+                null
+            }
+        }
+    }
 
     private var isListVisible = false
 
@@ -70,4 +78,5 @@ class MainActivity : AppCompatActivity() {
     private fun resetImage() {
         imageView.setImageResource(R.drawable.zmaj_cuti200)
     }
+
 }

@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
+import java.util.Locale
 
 class SoundAdapter(
     private val soundList: List<Int>,
@@ -22,9 +23,13 @@ class SoundAdapter(
     }
 
     override fun onBindViewHolder(holder: SoundViewHolder, position: Int) {
-        holder.soundButton.text = "Sound ${position + 1}"
+        val context = holder.itemView.context
+        val resId = soundList[position]
+        val name = context.resources.getResourceEntryName(resId) // Get the actual file name
+
+        holder.soundButton.text = name.replace("_", " ").replaceFirstChar { it.uppercase() }
         holder.soundButton.setOnClickListener {
-            onSoundClick(soundList[position])
+            onSoundClick(resId)
         }
     }
 

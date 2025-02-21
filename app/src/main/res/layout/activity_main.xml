@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
+    android:theme="@style/Theme.Zmaj"
     android:orientation="vertical"
     android:gravity="center"
     android:padding="16dp">
