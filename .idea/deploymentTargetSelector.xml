@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="zmaj_soundboard_kotlin">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-02-19T12:01:33.559976927Z">
+        <DropdownSelection timestamp="2025-02-24T17:05:28.834072906Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="PhysicalDevice" identifier="serial=b03dec7e" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=/home/pop/.android/avd/Pixel_7a_API_35.avd" />
             </handle>
           </Target>
         </DropdownSelection>
