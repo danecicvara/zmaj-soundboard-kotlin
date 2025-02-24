@@ -4,5 +4,4 @@
         <item name="android:colorBackground">@color/backgroundLight</item>
         <item name="android:textColor">@color/textLight</item>
     </style>
-
 </resources>

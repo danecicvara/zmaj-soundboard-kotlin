@@ -3,11 +3,16 @@ package com.example.zmaj_soundboard_kotlin
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ImageView
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.Fade
+import androidx.transition.TransitionManager
+import androidx.transition.TransitionSet
 
 class MainActivity : AppCompatActivity() {
 
@@ -39,11 +44,41 @@ class MainActivity : AppCompatActivity() {
 
         setupRecyclerView()
         initializeButtons()
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+               if (isListVisible) {
+                   toggleSoundList()
+               } else {
+                   isEnabled = false
+                   onBackPressedDispatcher.onBackPressed()
+               }
+            }
+        })
     }
+
     private fun toggleSoundList() {
         isListVisible = !isListVisible
-        soundRecyclerView.visibility = if (isListVisible) View.VISIBLE else View.GONE
+
+        TransitionManager.beginDelayedTransition(
+            findViewById(R.id.rootLayout),
+            TransitionSet().apply {
+                addTransition(Fade())
+                duration = 200
+            }
+        )
+
+        if (isListVisible) {
+            soundRecyclerView.visibility = View.VISIBLE
+            expandListButton.visibility = View.GONE
+            soundRecyclerView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in))
+        } else {
+            soundRecyclerView.visibility = View.GONE
+            expandListButton.visibility = View.VISIBLE
+            soundRecyclerView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_out))
+        }
     }
+
     private fun playRandomSound(soundResId: Int) {
         if (::mediaPlayer.isInitialized && mediaPlayer.isPlaying) {
             mediaPlayer.release()
